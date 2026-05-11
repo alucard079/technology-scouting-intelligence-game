@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Scout Radar Challenge</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(15, 31, 55, 0.92);
+      --panel-2: rgba(20, 45, 78, 0.86);
+      --text: #eaf4ff;
+      --muted: #9fb6d1;
+      --accent: #38bdf8;
+      --accent-2: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --purple: #a855f7;
+      --border: rgba(148, 163, 184, 0.22);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 32%),
+        radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.18), transparent 28%),
+        linear-gradient(135deg, #06111f 0%, #081827 45%, #050b14 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .app {
+      width: min(1220px, 94vw);
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 30px;
+      background:
+        linear-gradient(135deg, rgba(15, 31, 55, 0.95), rgba(8, 20, 36, 0.88)),
+        radial-gradient(circle at 90% 20%, rgba(34, 197, 94, 0.22), transparent 36%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -60px -60px auto auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 0 0 40px rgba(56, 189, 248, 0.03), 0 0 0 90px rgba(34, 197, 94, 0.025);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #b8e7ff;
+      padding: 8px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.08);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 0.98;
+      max-width: 760px;
+      letter-spacing: -0.05em;
+    }
+
+    .subtitle {
+      margin-top: 16px;
+      max-width: 740px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2, .card h3 {
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 0.86rem;
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(2, 6, 23, 0.55);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(56, 189, 248, 0.85);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: #03111f;
+      background: linear-gradient(135deg, #38bdf8, #22c55e);
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 12px 26px rgba(34, 197, 94, 0.18);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(56, 189, 248, 0.22);
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: none;
+    }
+
+    button.danger {
+      color: white;
+      background: linear-gradient(135deg, #fb7185, #ef4444);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .instructions {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.95rem;
+    }
+
+    .instructions strong {
+      color: var(--text);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #d9f5ff;
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .game-shell {
+      display: none;
+      margin-top: 18px;
+      grid-template-columns: 0.95fr 1.25fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+      display: none;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(15, 31, 55, 0.78);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+    }
+
+    .stat small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .stat strong {
+      font-size: 1.35rem;
+    }
+
+    .signal-card {
+      min-height: 410px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(168, 85, 247, 0.12);
+      color: #e7d5ff;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      margin-bottom: 12px;
+    }
+
+    .scenario-title {
+      font-size: clamp(1.35rem, 2.2vw, 2rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+
+    .scenario-text {
+      color: #c6d7ea;
+      line-height: 1.62;
+      font-size: 1rem;
+    }
+
+    .evidence-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .evidence {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .radar-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .radar-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -70px -120px auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,197,94,0.18), transparent 64%);
+      pointer-events: none;
+    }
+
+    .radar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .zone {
+      min-height: 180px;
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.26);
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .zone:hover {
+      transform: translateY(-2px);
+      border-color: rgba(56, 189, 248, 0.65);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .zone.selected {
+      border-color: rgba(34, 197, 94, 0.95);
+      box-shadow: inset 0 0 0 2px rgba(34, 197, 94, 0.18), 0 0 24px rgba(34, 197, 94, 0.12);
+      background: rgba(34, 197, 94, 0.09);
+    }
+
+    .zone h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .zone p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .zone-score {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d9f5ff;
+      font-size: 0.85rem;
+    }
+
+    .r-adopt { border-top: 4px solid var(--accent-2); }
+    .r-trial { border-top: 4px solid var(--accent); }
+    .r-assess { border-top: 4px solid var(--warning); }
+    .r-hold { border-top: 4px solid var(--danger); }
+
+    .rationale-box {
+      margin-top: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 94px;
+      resize: vertical;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      padding: 14px;
+      color: var(--text);
+      background: rgba(2, 6, 23, 0.42);
+      font-family: inherit;
+      line-height: 1.45;
+      outline: none;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 14px;
+      border-radius: 18px;
+      padding: 16px;
+      line-height: 1.55;
+      color: #dcecff;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(2, 6, 23, 0.35);
+    }
+
+    .feedback.good {
+      border-color: rgba(34, 197, 94, 0.35);
+      background: rgba(34, 197, 94, 0.08);
+    }
+
+    .feedback.partial {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .feedback.bad {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .leaderboard {
+      margin-top: 18px;
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      color: #dcecff;
+      font-size: 0.92rem;
+    }
+
+    th {
+      color: var(--muted);
+      background: rgba(2, 6, 23, 0.35);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+      padding: 22px;
+      place-items: center;
+    }
+
+    .modal {
+      width: min(760px, 94vw);
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(15, 31, 55, 0.98), rgba(8, 20, 36, 0.98));
+      box-shadow: var(--shadow);
+      padding: 26px;
+      max-height: 88vh;
+      overflow: auto;
+    }
+
+    .modal h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: -0.05em;
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .result-box {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.34);
+    }
+
+    .result-box small {
+      color: var(--muted);
+      display: block;
+    }
+
+    .result-box strong {
+      display: block;
+      font-size: 1.45rem;
+      margin-top: 4px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 920px) {
+      .top-grid, .game-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .status-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero, .card {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .setup-grid, .radar-grid, .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .zone {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="eyebrow">UP MTM Activity • Technology Intelligence & Scouting</div>
+      <h1>Tech Scout Radar Challenge</h1>
+      <p class="subtitle">
+        A fast classroom game where teams act as Technology Managers. Read each technology signal, assess its impact and risk, then place it in the correct radar ring: Adopt, Trial, Assess, or Hold.
+      </p>
+      <div class="pill-row">
+        <span class="pill">Technology Intelligence</span>
+        <span class="pill">Technology Scouting</span>
+        <span class="pill">Technology Radar</span>
+        <span class="pill">TM Decision-Making</span>
+      </div>
+    </section>
+
+    <section class="top-grid" id="setupSection">
+      <div class="card">
+        <h2>Game Setup</h2>
+        <p class="subtitle" style="margin-top: 0;">Recommended for a 10–15 minute activity. Each group may use one device, then compare scores at the end.</p>
+
+        <div class="setup-grid">
+          <div>
+            <label for="teamName">Team name</label>
+            <input id="teamName" placeholder="Example: Team Radar" maxlength="32" />
+          </div>
+          <div>
+            <label for="difficulty">Game mode</label>
+            <select id="difficulty">
+              <option value="quick">Quick Sprint — 6 signals</option>
+              <option value="full" selected>Full Challenge — 10 signals</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setup-grid">
+          <div>
+            <label for="minutes">Timer</label>
+            <select id="minutes">
+              <option value="10">10 minutes</option>
+              <option value="12" selected>12 minutes</option>
+              <option value="15">15 minutes</option>
+            </select>
+          </div>
+          <div>
+            <label for="industry">Industry lens</label>
+            <select id="industry">
+              <option value="Software Development">Software Development</option>
+              <option value="Banking / Fintech">Banking / Fintech</option>
+              <option value="Agriculture">Agriculture</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education</option>
+              <option value="Telecommunications">Telecommunications</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="startBtn">Start Challenge</button>
+          <button class="secondary" id="showLeaderboardBtn">View Leaderboard</button>
+          <button class="secondary" id="resetLeaderboardBtn">Reset Leaderboard</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>How to Win</h2>
+        <div class="instructions">
+          <p><strong>1.</strong> Read the technology signal carefully.</p>
+          <p><strong>2.</strong> Decide where it belongs in the radar: Adopt, Trial, Assess, or Hold.</p>
+          <p><strong>3.</strong> Add a short rationale. Bonus points are given when you mention business impact, risk, customer value, or strategic fit.</p>
+          <p><strong>4.</strong> Highest score wins. In case of tie, the faster team wins.</p>
+        </div>
+        <div class="pill-row">
+          <span class="pill">Correct ring: +10</span>
+          <span class="pill">Near answer: +5</span>
+          <span class="pill">Rationale bonus: +3</span>
+          <span class="pill">Speed bonus: up to +10</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="status-bar" id="statusBar">
+      <div class="stat">
+        <small>Team</small>
+        <strong id="teamStat">—</strong>
+      </div>
+      <div class="stat">
+        <small>Score</small>
+        <strong id="scoreStat">0</strong>
+      </div>
+      <div class="stat">
+        <small>Signal</small>
+        <strong id="roundStat">1 / 10</strong>
+      </div>
+      <div class="stat">
+        <small>Time Left</small>
+        <strong id="timerStat">12:00</strong>
+      </div>
+    </section>
+
+    <section class="game-shell" id="gameShell">
+      <div class="card signal-card">
+        <div>
+          <span class="tag" id="signalType">Technology Signal</span>
+          <h2 class="scenario-title" id="scenarioTitle">Scenario title</h2>
+          <p class="scenario-text" id="scenarioText">Scenario details appear here.</p>
+          <div class="evidence-list" id="evidenceList"></div>
+        </div>
+        <div class="actions">
+          <button class="secondary" id="skipBtn">Skip Signal</button>
+          <button class="danger" id="endBtn">End Game</button>
+        </div>
+      </div>
+
+      <div class="card radar-card">
+        <h2>Place the technology in the radar</h2>
+        <div class="radar-grid">
+          <div class="zone r-adopt" data-ring="Adopt">
+            <h3>Adopt <span class="zone-score">A</span></h3>
+            <p>Ready to use now. Proven value, manageable risk, clear strategic fit.</p>
+          </div>
+          <div class="zone r-trial" data-ring="Trial">
+            <h3>Trial <span class="zone-score">T</span></h3>
+            <p>Promising. Test through pilot projects before wide implementation.</p>
+          </div>
+          <div class="zone r-assess" data-ring="Assess">
+            <h3>Assess <span class="zone-score">?</span></h3>
+            <p>Important signal, but more data is needed on maturity, risk, or fit.</p>
+          </div>
+          <div class="zone r-hold" data-ring="Hold">
+            <h3>Hold <span class="zone-score">H</span></h3>
+            <p>Not recommended for now due to high risk, low maturity, or weak fit.</p>
+          </div>
+        </div>
+
+        <div class="rationale-box">
+          <label for="rationale">Short rationale</label>
+          <textarea id="rationale" placeholder="Example: Trial because it can improve productivity, but needs pilot testing due to privacy and quality risks."></textarea>
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn">Submit Decision</button>
+          <button class="secondary" id="clearBtn">Clear Selection</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+
+    <section class="card leaderboard" id="leaderboardSection">
+      <h2>Leaderboard</h2>
+      <p class="subtitle" style="margin-top: 0;">This leaderboard is saved on this browser only. For classroom use, ask every team to show their final score or let all teams play on one device.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>Industry</th>
+            <th>Score</th>
+            <th>Time Used</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="resultModal">
+    <div class="modal">
+      <div class="eyebrow">Challenge Complete</div>
+      <h2 id="resultTitle">Great work!</h2>
+      <p id="resultMessage">Your final results are shown below.</p>
+      <div class="result-grid">
+        <div class="result-box">
+          <small>Final Score</small>
+          <strong id="finalScore">0</strong>
+        </div>
+        <div class="result-box">
+          <small>Correct Decisions</small>
+          <strong id="finalCorrect">0</strong>
+        </div>
+        <div class="result-box">
+          <small>Time Used</small>
+          <strong id="finalTime">0:00</strong>
+        </div>
+      </div>
+      <p><strong>Facilitator prompt:</strong> Ask the team to explain one signal they placed correctly and one signal they found difficult. This connects the game back to Technology Intelligence, Scouting, and Technology Management decisions.</p>
+      <div class="actions">
+        <button id="playAgainBtn">Play Again</button>
+        <button class="secondary" id="modalLeaderboardBtn">View Leaderboard</button>
+        <button class="secondary" id="closeModalBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const allSignals = [
+      {
+        type: "Software / AI",
+        title: "AI Coding Assistant for Internal Development Teams",
+        text: "A software company is considering an AI coding assistant to speed up development. Developers report faster boilerplate coding, but security and code ownership concerns remain.",
+        evidence: ["Early users report productivity improvement for repetitive tasks.", "Requires policy for confidential code, client data, and human review.", "Works best as an assistant, not as a replacement for engineering judgment."],
+        answer: "Trial",
+        near: ["Adopt", "Assess"],
+        explanation: "Trial is the best fit. The technology is useful and promising, but should first be piloted with governance, code review, and data protection rules."
+      },
+      {
+        type: "Software / AI",
+        title: "Fully Autonomous AI Agent Replacing an Entire Development Team",
+        text: "A vendor claims its AI agent can independently gather requirements, code, test, deploy, and maintain enterprise systems with minimal human intervention.",
+        evidence: ["The promise is attractive but reliability is still uncertain.", "Accountability and client acceptance are unclear.", "Errors in production systems may create major business risk."],
+        answer: "Hold",
+        near: ["Assess"],
+        explanation: "Hold is the best fit. The risk and uncertainty are too high for full adoption. A firm may assess the space, but should not rely on it for critical systems yet."
+      },
+      {
+        type: "Cybersecurity",
+        title: "Automated Vulnerability Scanning in the CI/CD Pipeline",
+        text: "The engineering team wants to add automated dependency and vulnerability scanning before every production deployment.",
+        evidence: ["Integrates into existing DevOps workflow.", "Helps detect security issues earlier.", "Requires tuning to avoid too many false positives."],
+        answer: "Adopt",
+        near: ["Trial"],
+        explanation: "Adopt is the best fit if the organization already has CI/CD. It is mature, strategically useful, and supports risk reduction in operations."
+      },
+      {
+        type: "Agriculture / IoT",
+        title: "IoT Moisture Sensors for Solar Rice Dryers",
+        text: "An agri-tech startup is developing a solar rice dryer. It is considering IoT sensors to monitor grain moisture and improve drying quality.",
+        evidence: ["Can improve quality control and reduce spoilage.", "Needs field testing with farmers and local connectivity conditions.", "Cost sensitivity is high for smallholder farmers."],
+        answer: "Trial",
+        near: ["Assess"],
+        explanation: "Trial is the best fit. The use case is clear, but it needs pilot testing under real farming conditions, including cost and connectivity constraints."
+      },
+      {
+        type: "Fintech",
+        title: "Blockchain-Based National Identity System for Bank Onboarding",
+        text: "A fintech firm is studying blockchain identity to speed up KYC and customer onboarding.",
+        evidence: ["Potential to reduce onboarding friction.", "Requires regulation, interoperability, and strong data governance.", "Benefits depend on ecosystem adoption."],
+        answer: "Assess",
+        near: ["Trial"],
+        explanation: "Assess is the best fit. The idea may be valuable, but it depends on regulation, standards, ecosystem participation, and privacy safeguards."
+      },
+      {
+        type: "Education Technology",
+        title: "AI Tutor for Personalized Student Feedback",
+        text: "A university is considering an AI tutor that gives students immediate feedback on writing drafts and practice quizzes.",
+        evidence: ["Can support personalized learning at scale.", "May produce inaccurate or biased feedback.", "Needs teacher oversight and academic integrity guidelines."],
+        answer: "Trial",
+        near: ["Assess"],
+        explanation: "Trial is the best fit. The technology can improve learning support, but should be piloted with teacher oversight, clear guidelines, and evaluation."
+      },
+      {
+        type: "Healthcare",
+        title: "AI Diagnosis Tool Used Without Physician Review",
+        text: "A clinic is offered an AI tool that claims to diagnose patient conditions directly and automatically without physician review.",
+        evidence: ["Potentially high impact but also high safety risk.", "Medical accountability is critical.", "False results can cause harm."],
+        answer: "Hold",
+        near: ["Assess"],
+        explanation: "Hold is the best fit. In healthcare, high-risk AI should not be used without human clinical review, validation, and compliance checks."
+      },
+      {
+        type: "Telecommunications",
+        title: "5G Network Slicing for Enterprise Clients",
+        text: "A telco is exploring 5G network slicing to offer customized network performance for hospitals, factories, and logistics companies.",
+        evidence: ["Strong potential for enterprise differentiation.", "Requires infrastructure readiness and enterprise demand validation.", "Use cases may vary by customer segment."],
+        answer: "Assess",
+        near: ["Trial"],
+        explanation: "Assess is the best fit unless infrastructure and customer demand are already validated. The company should study use cases, readiness, and market fit."
+      },
+      {
+        type: "Operations / Automation",
+        title: "Robotic Process Automation for Repetitive Back-Office Tasks",
+        text: "A company has high-volume repetitive tasks such as report generation, data encoding, and reconciliation. It is considering RPA tools.",
+        evidence: ["Mature technology for rule-based repetitive processes.", "Can reduce manual workload.", "Works best when processes are already stable and standardized."],
+        answer: "Adopt",
+        near: ["Trial"],
+        explanation: "Adopt is the best fit if the process is stable and repetitive. RPA is already mature for many back-office use cases."
+      },
+      {
+        type: "Green Technology",
+        title: "Carbon-Aware Cloud Workload Scheduling",
+        text: "A cloud team is exploring workload scheduling that runs non-urgent computing tasks when renewable energy availability is higher.",
+        evidence: ["Supports sustainability goals.", "May reduce carbon footprint for flexible workloads.", "Needs alignment with performance, cost, and service-level requirements."],
+        answer: "Assess",
+        near: ["Trial"],
+        explanation: "Assess is the best fit. It has strategic sustainability value, but the team must evaluate workload flexibility, cost, and service-level impact."
+      },
+      {
+        type: "Customer Experience",
+        title: "AI Chatbot for Frequently Asked Customer Questions",
+        text: "A service company wants to deploy an AI chatbot for FAQs, order status, and basic support requests, with escalation to human agents.",
+        evidence: ["Can reduce repetitive workload.", "Improves availability for simple requests.", "Needs escalation path and monitoring for incorrect responses."],
+        answer: "Trial",
+        near: ["Adopt"],
+        explanation: "Trial is the best fit. The use case is practical, but it should first be piloted, monitored, and connected to human escalation."
+      },
+      {
+        type: "Research / IP",
+        title: "Patent Search Before Building a New Sensor Product",
+        text: "A startup wants to build a sensor device. Before prototyping, it plans to search patent databases and research papers for similar technologies.",
+        evidence: ["Helps avoid duplicating existing work.", "Can reveal possible partners or licensing opportunities.", "Supports freedom-to-operate assessment."],
+        answer: "Adopt",
+        near: ["Trial"],
+        explanation: "Adopt is the best fit. Patent and research scouting should be part of responsible technology development before major investment."
+      }
+    ];
+
+    const state = {
+      teamName: "",
+      industry: "",
+      signals: [],
+      currentIndex: 0,
+      score: 0,
+      correct: 0,
+      selectedRing: null,
+      totalSeconds: 0,
+      secondsLeft: 0,
+      timer: null,
+      startedAt: null,
+      finished: false
+    };
+
+    const setupSection = document.getElementById("setupSection");
+    const statusBar = document.getElementById("statusBar");
+    const gameShell = document.getElementById("gameShell");
+    const leaderboardSection = document.getElementById("leaderboardSection");
+    const teamNameInput = document.getElementById("teamName");
+    const difficultySelect = document.getElementById("difficulty");
+    const minutesSelect = document.getElementById("minutes");
+    const industrySelect = document.getElementById("industry");
+    const startBtn = document.getElementById("startBtn");
+    const showLeaderboardBtn = document.getElementById("showLeaderboardBtn");
+    const resetLeaderboardBtn = document.getElementById("resetLeaderboardBtn");
+    const teamStat = document.getElementById("teamStat");
+    const scoreStat = document.getElementById("scoreStat");
+    const roundStat = document.getElementById("roundStat");
+    const timerStat = document.getElementById("timerStat");
+    const signalType = document.getElementById("signalType");
+    const scenarioTitle = document.getElementById("scenarioTitle");
+    const scenarioText = document.getElementById("scenarioText");
+    const evidenceList = document.getElementById("evidenceList");
+    const zones = document.querySelectorAll(".zone");
+    const rationale = document.getElementById("rationale");
+    const submitBtn = document.getElementById("submitBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const skipBtn = document.getElementById("skipBtn");
+    const endBtn = document.getElementById("endBtn");
+    const feedback = document.getElementById("feedback");
+    const resultModal = document.getElementById("resultModal");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultMessage = document.getElementById("resultMessage");
+    const finalScore = document.getElementById("finalScore");
+    const finalCorrect = document.getElementById("finalCorrect");
+    const finalTime = document.getElementById("finalTime");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const modalLeaderboardBtn = document.getElementById("modalLeaderboardBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const leaderboardBody = document.getElementById("leaderboardBody");
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m}:${String(s).padStart(2, "0")}`;
+    }
+
+    function updateStats() {
+      teamStat.textContent = state.teamName;
+      scoreStat.textContent = state.score;
+      roundStat.textContent = `${Math.min(state.currentIndex + 1, state.signals.length)} / ${state.signals.length}`;
+      timerStat.textContent = formatTime(state.secondsLeft);
+    }
+
+    function renderSignal() {
+      const signal = state.signals[state.currentIndex];
+      if (!signal) {
+        endGame();
+        return;
+      }
+
+      signalType.textContent = signal.type;
+      scenarioTitle.textContent = signal.title;
+      scenarioText.textContent = signal.text;
+      evidenceList.innerHTML = signal.evidence.map(item => `<div class="evidence">${item}</div>`).join("");
+      rationale.value = "";
+      feedback.style.display = "none";
+      feedback.className = "feedback";
+      clearSelection();
+      updateStats();
+    }
+
+    function clearSelection() {
+      state.selectedRing = null;
+      zones.forEach(zone => zone.classList.remove("selected"));
+    }
+
+    function rationaleBonus(text) {
+      const words = text.toLowerCase();
+      const keywords = ["risk", "impact", "customer", "value", "strategy", "strategic", "maturity", "cost", "privacy", "security", "pilot", "partner", "market", "operations"];
+      let hits = 0;
+      keywords.forEach(keyword => {
+        if (words.includes(keyword)) hits += 1;
+      });
+      if (text.trim().length < 24) return 0;
+      return Math.min(3, hits);
+    }
+
+    function submitDecision() {
+      if (!state.selectedRing) {
+        alert("Please select a radar ring first.");
+        return;
+      }
+
+      const signal = state.signals[state.currentIndex];
+      let points = 0;
+      let resultClass = "bad";
+      let headline = "Not quite.";
+
+      if (state.selectedRing === signal.answer) {
+        points += 10;
+        state.correct += 1;
+        resultClass = "good";
+        headline = "Correct decision.";
+      } else if (signal.near.includes(state.selectedRing)) {
+        points += 5;
+        resultClass = "partial";
+        headline = "Reasonable, but not the strongest option.";
+      }
+
+      const bonus = rationaleBonus(rationale.value);
+      points += bonus;
+      state.score += points;
+
+      feedback.className = `feedback ${resultClass}`;
+      feedback.innerHTML = `
+        <strong>${headline}</strong><br>
+        Best radar ring: <strong>${signal.answer}</strong><br>
+        ${signal.explanation}<br>
+        <br>
+        Points earned: <strong>${points}</strong> ${bonus > 0 ? `(including +${bonus} rationale bonus)` : ""}
+      `;
+      feedback.style.display = "block";
+      updateStats();
+
+      submitBtn.disabled = true;
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        state.currentIndex += 1;
+        if (state.currentIndex >= state.signals.length) {
+          endGame();
+        } else {
+          renderSignal();
+        }
+      }, 1850);
+    }
+
+    function skipSignal() {
+      state.currentIndex += 1;
+      if (state.currentIndex >= state.signals.length) {
+        endGame();
+      } else {
+        renderSignal();
+      }
+    }
+
+    function startTimer() {
+      clearInterval(state.timer);
+      state.timer = setInterval(() => {
+        state.secondsLeft -= 1;
+        updateStats();
+        if (state.secondsLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function startGame() {
+      const team = teamNameInput.value.trim() || "Unnamed Team";
+      const mode = difficultySelect.value;
+      const count = mode === "quick" ? 6 : 10;
+      const minutes = Number(minutesSelect.value);
+
+      state.teamName = team;
+      state.industry = industrySelect.value;
+      state.signals = shuffle(allSignals).slice(0, count);
+      state.currentIndex = 0;
+      state.score = 0;
+      state.correct = 0;
+      state.selectedRing = null;
+      state.totalSeconds = minutes * 60;
+      state.secondsLeft = minutes * 60;
+      state.startedAt = Date.now();
+      state.finished = false;
+
+      setupSection.style.display = "none";
+      leaderboardSection.style.display = "none";
+      statusBar.style.display = "grid";
+      gameShell.style.display = "grid";
+      resultModal.style.display = "none";
+
+      renderSignal();
+      startTimer();
+    }
+
+    function speedBonus() {
+      const used = state.totalSeconds - Math.max(state.secondsLeft, 0);
+      const ratio = Math.max(0, 1 - used / state.totalSeconds);
+      return Math.round(ratio * 10);
+    }
+
+    function endGame() {
+      if (state.finished) return;
+      state.finished = true;
+      clearInterval(state.timer);
+
+      const bonus = speedBonus();
+      state.score += bonus;
+      updateStats();
+
+      const usedSeconds = state.totalSeconds - Math.max(state.secondsLeft, 0);
+      saveScore({
+        team: state.teamName,
+        industry: state.industry,
+        score: state.score,
+        correct: state.correct,
+        total: state.signals.length,
+        usedSeconds,
+        date: new Date().toISOString()
+      });
+
+      resultTitle.textContent = `${state.teamName}, your score is ${state.score}`;
+      resultMessage.textContent = `You placed ${state.correct} out of ${state.signals.length} signals in the best radar ring. Speed bonus: +${bonus}.`;
+      finalScore.textContent = state.score;
+      finalCorrect.textContent = `${state.correct}/${state.signals.length}`;
+      finalTime.textContent = formatTime(usedSeconds);
+      resultModal.style.display = "grid";
+      renderLeaderboard();
+    }
+
+    function saveScore(entry) {
+      const scores = JSON.parse(localStorage.getItem("techRadarScores") || "[]");
+      scores.push(entry);
+      scores.sort((a, b) => b.score - a.score || a.usedSeconds - b.usedSeconds);
+      localStorage.setItem("techRadarScores", JSON.stringify(scores.slice(0, 20)));
+    }
+
+    function renderLeaderboard() {
+      const scores = JSON.parse(localStorage.getItem("techRadarScores") || "[]");
+      leaderboardBody.innerHTML = scores.length
+        ? scores.map((entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${entry.team}</td>
+            <td>${entry.industry}</td>
+            <td><strong>${entry.score}</strong> (${entry.correct}/${entry.total})</td>
+            <td>${formatTime(entry.usedSeconds)}</td>
+          </tr>
+        `).join("")
+        : `<tr><td colspan="5">No scores yet. Start a challenge first.</td></tr>`;
+    }
+
+    zones.forEach(zone => {
+      zone.addEventListener("click", () => {
+        clearSelection();
+        zone.classList.add("selected");
+        state.selectedRing = zone.dataset.ring;
+      });
+    });
+
+    startBtn.addEventListener("click", startGame);
+    submitBtn.addEventListener("click", submitDecision);
+    clearBtn.addEventListener("click", clearSelection);
+    skipBtn.addEventListener("click", skipSignal);
+    endBtn.addEventListener("click", endGame);
+
+    showLeaderboardBtn.addEventListener("click", () => {
+      renderLeaderboard();
+      leaderboardSection.style.display = leaderboardSection.style.display === "block" ? "none" : "block";
+    });
+
+    resetLeaderboardBtn.addEventListener("click", () => {
+      if (confirm("Reset leaderboard on this browser?")) {
+        localStorage.removeItem("techRadarScores");
+        renderLeaderboard();
+      }
+    });
+
+    playAgainBtn.addEventListener("click", () => {
+      resultModal.style.display = "none";
+      setupSection.style.display = "grid";
+      statusBar.style.display = "none";
+      gameShell.style.display = "none";
+      leaderboardSection.style.display = "none";
+    });
+
+    modalLeaderboardBtn.addEventListener("click", () => {
+      resultModal.style.display = "none";
+      setupSection.style.display = "grid";
+      statusBar.style.display = "none";
+      gameShell.style.display = "none";
+      renderLeaderboard();
+      leaderboardSection.style.display = "block";
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    });
+
+    closeModalBtn.addEventListener("click", () => {
+      resultModal.style.display = "none";
+    });
+
+    renderLeaderboard();
+  </script>
+</body>
+</html>
