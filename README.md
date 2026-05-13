@@ -15,7 +15,7 @@ The activity helps students practice technology assessment, technology scouting,
 - No installation or build step required
 - Team-based gameplay using one device per group
 - Quick Sprint mode with 6 randomized signals
-- Full Challenge mode with 10 randomized signals
+- Full Challenge mode with 12 randomized signals
 - Configurable 10, 12, or 15 minute timer
 - Skip-and-return flow while the timer is running
 - Scoring for correct answers, near answers, rationale quality, and speed

@@ -678,7 +678,7 @@
             <label for="difficulty">Game mode</label>
             <select id="difficulty">
               <option value="quick">Quick Sprint — 6 signals</option>
-              <option value="full" selected>Full Challenge — 10 signals</option>
+              <option value="full" selected>Full Challenge — 12 signals</option>
             </select>
           </div>
         </div>
@@ -728,11 +728,11 @@
       </div>
       <div class="stat">
         <small>Answered</small>
-        <strong id="answeredStat">0 / 10</strong>
+        <strong id="answeredStat">0 / 12</strong>
       </div>
       <div class="stat">
         <small>Signal</small>
-        <strong id="roundStat">1 / 10</strong>
+        <strong id="roundStat">1 / 12</strong>
       </div>
       <div class="stat">
         <small>Time Left</small>
@@ -898,6 +898,15 @@
         answer: "Trial",
         near: ["Assess"],
         explanation: "Trial is the best fit because the tool can improve learning support at scale, but it should be piloted with teacher oversight, quality checks, and academic integrity rules."
+      },
+      {
+        type: "Robotics / AI",
+        title: "ChatGPT-Like Service Robot with Sensors",
+        text: "Because tools like ChatGPT can already understand and respond to people, a company is exploring an AI-driven robot that combines a conversational AI model with cameras, microphones, motion sensors, and object detection. The robot could recognize its surroundings, answer questions, guide visitors, and interact with people in physical spaces.",
+        evidence: ["Conversational AI can already support natural language interaction.", "Sensors may allow the robot to detect people, objects, movement, and environmental conditions.", "Physical interaction raises safety, privacy, reliability, accessibility, cost, and maintenance questions."],
+        answer: "Assess",
+        near: ["Trial"],
+        explanation: "Assess is the best fit because the concept has strong potential, but the organization needs more evidence on sensor accuracy, safety, privacy, cost, maintenance, and operational fit. If limited to a controlled lobby or campus pilot with safety rules, it could move toward Trial."
       },
       {
         type: "Healthcare",
@@ -1216,7 +1225,7 @@
     function startGame() {
       const team = teamNameInput.value.trim() || "Unnamed Team";
       const mode = difficultySelect.value;
-      const count = mode === "quick" ? 6 : 10;
+      const count = mode === "quick" ? 6 : 12;
       const minutes = Number(minutesSelect.value);
 
       state.teamName = team;
