@@ -562,6 +562,23 @@
       line-height: 1.45;
     }
 
+    .answer-explanation {
+      margin-top: 8px;
+      color: #c6d7ea;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .answer-note {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: 16px;
+      color: #fdecc8;
+      background: rgba(245, 158, 11, 0.1);
+      line-height: 1.5;
+    }
+
     .answer-status {
       justify-self: end;
       border-radius: 999px;
@@ -798,8 +815,10 @@
       <div class="answer-key">
         <h3>Correct Answers</h3>
         <div class="answer-list" id="answerList"></div>
+        <div class="answer-note">
+          <strong>Note:</strong> These answers are suggested based on the information given in each signal. In real situations, the best decision can still vary depending on context, resources, regulation, strategy, timing, and available evidence. The goal is to learn: explain your reasoning, compare assumptions, and improve technology judgment.
+        </div>
       </div>
-      <p><strong>Facilitator prompt:</strong> Ask the team to explain one decision they were confident about and one signal they skipped or revisited.</p>
       <div class="actions">
         <button id="playAgainBtn">Play Again</button>
         <button class="secondary" id="closeModalBtn">Close</button>
@@ -815,7 +834,8 @@
         text: "A software company is considering an AI coding assistant to speed up development. Developers report faster boilerplate coding, but security and code ownership concerns remain.",
         evidence: ["Early users report productivity improvement for repetitive tasks.", "Requires policy for confidential code, client data, and human review.", "Works best as an assistant, not as a replacement for engineering judgment."],
         answer: "Trial",
-        near: ["Adopt", "Assess"]
+        near: ["Adopt", "Assess"],
+        explanation: "Trial is the best fit because the tool has clear productivity value, but it still needs a controlled pilot, usage policy, security review, and human code review before broad adoption."
       },
       {
         type: "Software / AI",
@@ -823,7 +843,8 @@
         text: "A vendor claims its AI agent can independently gather requirements, code, test, deploy, and maintain enterprise systems with minimal human intervention.",
         evidence: ["The promise is attractive but reliability is still uncertain.", "Accountability and client acceptance are unclear.", "Errors in production systems may create major business risk."],
         answer: "Hold",
-        near: ["Assess"]
+        near: ["Assess"],
+        explanation: "Hold is the best fit because the risk is too high for a critical development function. Reliability, accountability, client acceptance, and production safety are not mature enough for deployment."
       },
       {
         type: "Cybersecurity",
@@ -831,7 +852,8 @@
         text: "The engineering team wants to add automated dependency and vulnerability scanning before every production deployment.",
         evidence: ["Integrates into existing DevOps workflow.", "Helps detect security issues earlier.", "Requires tuning to avoid too many false positives."],
         answer: "Adopt",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Adopt is the best fit because automated scanning is a mature security practice that fits CI/CD workflows and catches risks earlier. The main work is tuning, not proving whether the technology is viable."
       },
       {
         type: "Agriculture / IoT",
@@ -839,7 +861,8 @@
         text: "An agri-tech startup is developing a solar rice dryer. It is considering IoT sensors to monitor grain moisture and improve drying quality.",
         evidence: ["Can improve quality control and reduce spoilage.", "Needs field testing with farmers and local connectivity conditions.", "Cost sensitivity is high for smallholder farmers."],
         answer: "Trial",
-        near: ["Assess"]
+        near: ["Assess"],
+        explanation: "Trial is the best fit because the value proposition is strong, but field conditions, connectivity, farmer workflows, and cost must be tested before scaling."
       },
       {
         type: "Fintech",
@@ -847,7 +870,8 @@
         text: "A fintech firm is studying blockchain identity to speed up KYC and customer onboarding.",
         evidence: ["Potential to reduce onboarding friction.", "Requires regulation, interoperability, and strong data governance.", "Benefits depend on ecosystem adoption."],
         answer: "Assess",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Assess is the best fit because the idea may create value, but success depends on regulation, interoperability, data governance, and broad ecosystem participation."
       },
       {
         type: "Education Technology",
@@ -855,7 +879,8 @@
         text: "A university is considering an AI tutor that gives students immediate feedback on writing drafts and practice quizzes.",
         evidence: ["Can support personalized learning at scale.", "May produce inaccurate or biased feedback.", "Needs teacher oversight and academic integrity guidelines."],
         answer: "Trial",
-        near: ["Assess"]
+        near: ["Assess"],
+        explanation: "Trial is the best fit because the tool can improve learning support at scale, but it should be piloted with teacher oversight, quality checks, and academic integrity rules."
       },
       {
         type: "Healthcare",
@@ -863,7 +888,8 @@
         text: "A clinic is offered an AI tool that claims to diagnose patient conditions directly and automatically without physician review.",
         evidence: ["Potentially high impact but also high safety risk.", "Medical accountability is critical.", "False results can cause harm."],
         answer: "Hold",
-        near: ["Assess"]
+        near: ["Assess"],
+        explanation: "Hold is the best fit because using diagnosis without physician review creates unacceptable safety, accountability, and patient harm risks."
       },
       {
         type: "Telecommunications",
@@ -871,7 +897,8 @@
         text: "A telco is exploring 5G network slicing to offer customized network performance for hospitals, factories, and logistics companies.",
         evidence: ["Strong potential for enterprise differentiation.", "Requires infrastructure readiness and enterprise demand validation.", "Use cases may vary by customer segment."],
         answer: "Assess",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Assess is the best fit because the strategic opportunity is real, but the telco still needs to validate infrastructure readiness, customer demand, and which enterprise use cases are strongest."
       },
       {
         type: "Operations / Automation",
@@ -879,7 +906,8 @@
         text: "A company has high-volume repetitive tasks such as report generation, data encoding, and reconciliation. It is considering RPA tools.",
         evidence: ["Mature technology for rule-based repetitive processes.", "Can reduce manual workload.", "Works best when processes are already stable and standardized."],
         answer: "Adopt",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Adopt is the best fit because RPA is already mature for stable, repetitive, rule-based work. The company should still choose suitable standardized processes."
       },
       {
         type: "Green Technology",
@@ -887,7 +915,8 @@
         text: "A cloud team is exploring workload scheduling that runs non-urgent computing tasks when renewable energy availability is higher.",
         evidence: ["Supports sustainability goals.", "May reduce carbon footprint for flexible workloads.", "Needs alignment with performance, cost, and service-level requirements."],
         answer: "Assess",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Assess is the best fit because the sustainability value is promising, but the team must evaluate workload flexibility, cost tradeoffs, performance impact, and service-level constraints."
       },
       {
         type: "Customer Experience",
@@ -895,7 +924,8 @@
         text: "A service company wants to deploy an AI chatbot for FAQs, order status, and basic support requests, with escalation to human agents.",
         evidence: ["Can reduce repetitive workload.", "Improves availability for simple requests.", "Needs escalation path and monitoring for incorrect responses."],
         answer: "Trial",
-        near: ["Adopt"]
+        near: ["Adopt"],
+        explanation: "Trial is the best fit because the chatbot has clear operational value, but it should be piloted with monitoring, response quality checks, and a reliable handoff to human agents."
       },
       {
         type: "Research / IP",
@@ -903,7 +933,8 @@
         text: "A startup wants to build a sensor device. Before prototyping, it plans to search patent databases and research papers for similar technologies.",
         evidence: ["Helps avoid duplicating existing work.", "Can reveal possible partners or licensing opportunities.", "Supports freedom-to-operate assessment."],
         answer: "Adopt",
-        near: ["Trial"]
+        near: ["Trial"],
+        explanation: "Adopt is the best fit because patent and literature search is a low-risk, high-value scouting activity before prototyping. It supports freedom-to-operate, partnership, and licensing decisions."
       }
     ];
 
@@ -1226,6 +1257,7 @@
             <div>
               <div class="answer-title">${escapeHTML(signal.title)}</div>
               <div class="answer-meta">Your answer: <strong>${escapeHTML(chosenRing)}</strong> · Correct answer: <strong>${escapeHTML(signal.answer)}</strong></div>
+              <div class="answer-explanation">${escapeHTML(signal.explanation)}</div>
             </div>
             <div class="answer-status ${status.className}">${status.label}</div>
           </div>
