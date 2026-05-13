@@ -17,6 +17,7 @@ The activity helps students practice technology assessment, technology scouting,
 - Quick Sprint mode with 6 randomized signals
 - Full Challenge mode with 12 randomized signals
 - Configurable 10, 12, or 15 minute timer
+- Generated lo-fi background sound that starts with the challenge
 - Skip-and-return flow while the timer is running
 - Scoring for correct answers, near answers, rationale quality, and speed
 - Final score screen designed for screenshot submission

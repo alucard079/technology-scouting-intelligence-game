@@ -451,6 +451,12 @@
       display: none;
     }
 
+    .notice.error {
+      color: #ffe1e6;
+      border-color: rgba(239, 68, 68, 0.42);
+      background: rgba(239, 68, 68, 0.14);
+    }
+
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -1036,15 +1042,166 @@
       }[char]));
     }
 
+    const audioState = {
+      context: null,
+      masterGain: null,
+      filter: null,
+      delay: null,
+      feedback: null,
+      timer: null,
+      enabled: false,
+      nextNoteTime: 0,
+      step: 0
+    };
+
+    const lofiChords = [
+      [220, 261.63, 329.63],
+      [196, 246.94, 293.66],
+      [174.61, 220, 261.63],
+      [164.81, 207.65, 246.94]
+    ];
+
+    function setupAudioGraph() {
+      if (audioState.context) return;
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) {
+        return;
+      }
+
+      audioState.context = new AudioContext();
+      audioState.masterGain = audioState.context.createGain();
+      audioState.filter = audioState.context.createBiquadFilter();
+      audioState.delay = audioState.context.createDelay();
+      audioState.feedback = audioState.context.createGain();
+
+      audioState.masterGain.gain.value = 0;
+      audioState.filter.type = "lowpass";
+      audioState.filter.frequency.value = 1350;
+      audioState.delay.delayTime.value = 0.28;
+      audioState.feedback.gain.value = 0.18;
+
+      audioState.filter.connect(audioState.masterGain);
+      audioState.filter.connect(audioState.delay);
+      audioState.delay.connect(audioState.feedback);
+      audioState.feedback.connect(audioState.delay);
+      audioState.delay.connect(audioState.masterGain);
+      audioState.masterGain.connect(audioState.context.destination);
+    }
+
+    function playTone(frequency, startTime, duration, gainValue, type = "triangle") {
+      const ctx = audioState.context;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, startTime);
+      oscillator.detune.setValueAtTime((Math.random() - 0.5) * 8, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.exponentialRampToValueAtTime(gainValue, startTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      oscillator.connect(gain);
+      gain.connect(audioState.filter);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.05);
+    }
+
+    function playSoftBeat(startTime) {
+      const ctx = audioState.context;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(92, startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(48, startTime + 0.16);
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.055, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.24);
+
+      oscillator.connect(gain);
+      gain.connect(audioState.masterGain);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + 0.28);
+    }
+
+    function scheduleLofiLoop() {
+      const ctx = audioState.context;
+      const beatLength = 0.72;
+
+      while (audioState.nextNoteTime < ctx.currentTime + 0.35) {
+        const chord = lofiChords[Math.floor(audioState.step / 4) % lofiChords.length];
+        const startTime = audioState.nextNoteTime;
+
+        if (audioState.step % 4 === 0) {
+          chord.forEach((note, index) => {
+            playTone(note, startTime + index * 0.015, beatLength * 2.8, 0.018);
+          });
+          playTone(chord[0] / 2, startTime, beatLength * 3.2, 0.014, "sine");
+        }
+
+        if (audioState.step % 2 === 0) {
+          playSoftBeat(startTime);
+        }
+
+        if (audioState.step % 2 === 1) {
+          const note = chord[Math.floor(Math.random() * chord.length)] * 2;
+          playTone(note, startTime + 0.08, beatLength * 0.85, 0.01, "sine");
+        }
+
+        audioState.nextNoteTime += beatLength;
+        audioState.step += 1;
+      }
+    }
+
+    async function startLofiSound() {
+      setupAudioGraph();
+      if (!audioState.context) return;
+
+      try {
+        await audioState.context.resume();
+      } catch (error) {
+        return;
+      }
+
+      audioState.enabled = true;
+      audioState.nextNoteTime = audioState.context.currentTime + 0.04;
+      audioState.masterGain.gain.cancelScheduledValues(audioState.context.currentTime);
+      audioState.masterGain.gain.setValueAtTime(audioState.masterGain.gain.value, audioState.context.currentTime);
+      audioState.masterGain.gain.linearRampToValueAtTime(0.42, audioState.context.currentTime + 0.45);
+      scheduleLofiLoop();
+      clearInterval(audioState.timer);
+      audioState.timer = setInterval(scheduleLofiLoop, 120);
+    }
+
+    function stopLofiSound() {
+      if (!audioState.context) return;
+
+      clearInterval(audioState.timer);
+      audioState.timer = null;
+      audioState.enabled = false;
+      audioState.masterGain.gain.cancelScheduledValues(audioState.context.currentTime);
+      audioState.masterGain.gain.setValueAtTime(audioState.masterGain.gain.value, audioState.context.currentTime);
+      audioState.masterGain.gain.linearRampToValueAtTime(0.0001, audioState.context.currentTime + 0.25);
+      setTimeout(() => {
+        if (!audioState.enabled && audioState.context) {
+          audioState.context.suspend();
+        }
+      }, 320);
+    }
+
     function answeredCount() {
       return state.responses.filter(response => response && response.ring).length;
     }
 
-    function showNotice(message) {
+    function showNotice(message, type = "info") {
       notice.innerHTML = message;
+      notice.classList.toggle("error", type === "error");
       notice.style.display = "block";
       setTimeout(() => {
         notice.style.display = "none";
+        notice.classList.remove("error");
       }, 1600);
     }
 
@@ -1120,7 +1277,7 @@
     function saveCurrentDecision(showMessage = true) {
       const selectedRing = getSelectedRing();
       if (!selectedRing) {
-        if (showMessage) showNotice("Please select a radar ring before saving. You can skip if you want to return later.");
+        if (showMessage) showNotice("Please select a radar ring before saving. You can skip if you want to return later.", "error");
         return false;
       }
 
@@ -1244,6 +1401,9 @@
 
       renderSignal();
       startTimer();
+      if (!audioState.enabled) {
+        startLofiSound();
+      }
     }
 
     function showResultModal(result) {
