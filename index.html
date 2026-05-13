@@ -817,6 +817,10 @@
           <strong id="finalTime">0:00</strong>
         </div>
         <div class="result-box">
+          <small>Time Started</small>
+          <strong id="finalStartedAt">--:--</strong>
+        </div>
+        <div class="result-box">
           <small>Signals Chosen</small>
           <strong id="finalSignalCount">0</strong>
         </div>
@@ -976,6 +980,7 @@
       currentIndex: 0,
       totalSeconds: 0,
       secondsLeft: 0,
+      startedAt: null,
       timer: null,
       finished: false,
       lastResult: null
@@ -1011,6 +1016,7 @@
     const finalScore = document.getElementById("finalScore");
     const finalCorrect = document.getElementById("finalCorrect");
     const finalTime = document.getElementById("finalTime");
+    const finalStartedAt = document.getElementById("finalStartedAt");
     const finalSignalCount = document.getElementById("finalSignalCount");
     const finalTimerSet = document.getElementById("finalTimerSet");
     const answerList = document.getElementById("answerList");
@@ -1030,6 +1036,15 @@
       const m = Math.floor(seconds / 60);
       const s = seconds % 60;
       return `${m}:${String(s).padStart(2, "0")}`;
+    }
+
+    function formatStartedAt(date) {
+      if (!date) return "--:--";
+      return new Intl.DateTimeFormat([], {
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit"
+      }).format(date);
     }
 
     function escapeHTML(value) {
@@ -1390,6 +1405,7 @@
       state.currentIndex = 0;
       state.totalSeconds = minutes * 60;
       state.secondsLeft = minutes * 60;
+      state.startedAt = new Date();
       state.finished = false;
       state.lastResult = null;
 
@@ -1412,6 +1428,7 @@
       finalScore.textContent = result.score;
       finalCorrect.textContent = `${result.correct}/${state.signals.length}`;
       finalTime.textContent = formatTime(result.usedSeconds);
+      finalStartedAt.textContent = formatStartedAt(state.startedAt);
       finalSignalCount.textContent = state.signals.length;
       finalTimerSet.textContent = `${Math.round(state.totalSeconds / 60)} min`;
       renderAnswerKey();
