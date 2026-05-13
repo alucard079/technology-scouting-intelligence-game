@@ -85,13 +85,13 @@
     h1 {
       font-size: clamp(2rem, 4vw, 4rem);
       line-height: 0.98;
-      max-width: 760px;
+      max-width: 820px;
       letter-spacing: -0.05em;
     }
 
     .subtitle {
       margin-top: 16px;
-      max-width: 740px;
+      max-width: 780px;
       color: var(--muted);
       line-height: 1.65;
       font-size: 1rem;
@@ -131,7 +131,7 @@
       margin-bottom: 7px;
     }
 
-    input, select {
+    input, select, textarea {
       width: 100%;
       border: 1px solid rgba(148, 163, 184, 0.25);
       background: rgba(2, 6, 23, 0.55);
@@ -140,11 +140,23 @@
       padding: 12px 14px;
       outline: none;
       font-size: 0.95rem;
+      font-family: inherit;
     }
 
-    input:focus, select:focus {
+    input:disabled {
+      color: #cbd5e1;
+      opacity: 0.95;
+    }
+
+    input:focus, select:focus, textarea:focus {
       border-color: rgba(56, 189, 248, 0.85);
       box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    }
+
+    textarea {
+      min-height: 94px;
+      resize: vertical;
+      line-height: 1.45;
     }
 
     button {
@@ -159,9 +171,15 @@
       box-shadow: 0 12px 26px rgba(34, 197, 94, 0.18);
     }
 
-    button:hover {
+    button:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 16px 30px rgba(56, 189, 248, 0.22);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      box-shadow: none;
     }
 
     button.secondary {
@@ -220,11 +238,10 @@
     }
 
     .status-bar {
-      display: grid;
+      display: none;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-top: 18px;
-      display: none;
     }
 
     .stat {
@@ -243,6 +260,47 @@
 
     .stat strong {
       font-size: 1.35rem;
+    }
+
+    .progress-strip {
+      display: none;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      min-width: 38px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #dcecff;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      background: rgba(2, 6, 23, 0.32);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .dot.answered {
+      border-color: rgba(34, 197, 94, 0.75);
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    .dot.skipped {
+      border-color: rgba(245, 158, 11, 0.65);
+      background: rgba(245, 158, 11, 0.10);
+    }
+
+    .dot.current,
+    .dot.answered.current,
+    .dot.skipped.current {
+      border-color: rgba(250, 204, 21, 1);
+      background: rgba(250, 204, 21, 0.28);
+      color: #fff7cc;
+      box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.18), 0 0 22px rgba(250, 204, 21, 0.28);
+      transform: translateY(-2px) scale(1.08);
     }
 
     .signal-card {
@@ -321,7 +379,7 @@
     }
 
     .zone {
-      min-height: 180px;
+      min-height: 150px;
       border-radius: 22px;
       border: 1px solid rgba(148, 163, 184, 0.22);
       padding: 16px;
@@ -382,73 +440,15 @@
       z-index: 1;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 94px;
-      resize: vertical;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      border-radius: 16px;
-      padding: 14px;
-      color: var(--text);
-      background: rgba(2, 6, 23, 0.42);
-      font-family: inherit;
-      line-height: 1.45;
-      outline: none;
-    }
-
-    .feedback {
-      display: none;
+    .notice {
       margin-top: 14px;
       border-radius: 18px;
-      padding: 16px;
-      line-height: 1.55;
+      padding: 14px;
+      line-height: 1.5;
       color: #dcecff;
-      border: 1px solid rgba(148, 163, 184, 0.24);
-      background: rgba(2, 6, 23, 0.35);
-    }
-
-    .feedback.good {
-      border-color: rgba(34, 197, 94, 0.35);
-      background: rgba(34, 197, 94, 0.08);
-    }
-
-    .feedback.partial {
-      border-color: rgba(245, 158, 11, 0.35);
-      background: rgba(245, 158, 11, 0.08);
-    }
-
-    .feedback.bad {
-      border-color: rgba(239, 68, 68, 0.35);
-      background: rgba(239, 68, 68, 0.08);
-    }
-
-    .leaderboard {
-      margin-top: 18px;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      background: rgba(56, 189, 248, 0.08);
       display: none;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 16px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-      color: #dcecff;
-      font-size: 0.92rem;
-    }
-
-    th {
-      color: var(--muted);
-      background: rgba(2, 6, 23, 0.35);
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
     }
 
     .modal-backdrop {
@@ -466,8 +466,7 @@
       width: min(760px, 94vw);
       border-radius: 28px;
       border: 1px solid var(--border);
-      background:
-        linear-gradient(135deg, rgba(15, 31, 55, 0.98), rgba(8, 20, 36, 0.98));
+      background: linear-gradient(135deg, rgba(15, 31, 55, 0.98), rgba(8, 20, 36, 0.98));
       box-shadow: var(--shadow);
       padding: 26px;
       max-height: 88vh;
@@ -511,10 +510,6 @@
       margin-top: 4px;
     }
 
-    .hidden {
-      display: none !important;
-    }
-
     @media (max-width: 920px) {
       .top-grid, .game-shell {
         grid-template-columns: 1fr;
@@ -551,20 +546,20 @@
       <div class="eyebrow">UP MTM Activity • Technology Intelligence & Scouting</div>
       <h1>Tech Scout Radar Challenge</h1>
       <p class="subtitle">
-        A fast classroom game where teams act as Technology Managers. Read each technology signal, assess its impact and risk, then place it in the correct radar ring: Adopt, Trial, Assess, or Hold.
+        A classroom game where teams act as Technology Managers. Read each technology signal, assess its impact and risk, then place it in the correct radar ring: Adopt, Trial, Assess, or Hold.
       </p>
       <div class="pill-row">
         <span class="pill">Technology Intelligence</span>
         <span class="pill">Technology Scouting</span>
         <span class="pill">Technology Radar</span>
-        <span class="pill">TM Decision-Making</span>
+        <span class="pill">No leaderboard — screenshot final score</span>
       </div>
     </section>
 
     <section class="top-grid" id="setupSection">
       <div class="card">
         <h2>Game Setup</h2>
-        <p class="subtitle" style="margin-top: 0;">Recommended for a 10–15 minute activity. Each group may use one device, then compare scores at the end.</p>
+        <p class="subtitle" style="margin-top: 0;">Recommended for a 10–15 minute activity. Each group uses one device and screenshots the final score.</p>
 
         <div class="setup-grid">
           <div>
@@ -597,23 +592,22 @@
 
         <div class="actions">
           <button id="startBtn">Start Challenge</button>
-          <button class="secondary" id="showLeaderboardBtn">View Leaderboard</button>
-          <button class="secondary" id="resetLeaderboardBtn">Reset Leaderboard</button>
         </div>
       </div>
 
       <div class="card">
         <h2>How to Win</h2>
         <div class="instructions">
-          <p><strong>1.</strong> Read the technology signal carefully.</p>
-          <p><strong>2.</strong> Decide where it belongs in the radar: Adopt, Trial, Assess, or Hold.</p>
-          <p><strong>3.</strong> Add a short rationale. Bonus points are given when you mention business impact, risk, customer value, or strategic fit.</p>
-          <p><strong>4.</strong> Highest score wins. In case of tie, the faster team wins.</p>
+          <p><strong>1.</strong> Read each technology signal carefully.</p>
+          <p><strong>2.</strong> Choose Adopt, Trial, Assess, or Hold.</p>
+          <p><strong>3.</strong> Write a short rationale using impact, risk, maturity, customer value, or strategic fit.</p>
+          <p><strong>4.</strong> You may skip and return to signals as long as there is time.</p>
+          <p><strong>5.</strong> Screenshot the final score. Highest score wins.</p>
         </div>
         <div class="pill-row">
           <span class="pill">Correct ring: +10</span>
           <span class="pill">Near answer: +5</span>
-          <span class="pill">Rationale bonus: +3</span>
+          <span class="pill">Rationale bonus: up to +3</span>
           <span class="pill">Speed bonus: up to +10</span>
         </div>
       </div>
@@ -625,8 +619,8 @@
         <strong id="teamStat">—</strong>
       </div>
       <div class="stat">
-        <small>Score</small>
-        <strong id="scoreStat">0</strong>
+        <small>Answered</small>
+        <strong id="answeredStat">0 / 10</strong>
       </div>
       <div class="stat">
         <small>Signal</small>
@@ -638,6 +632,8 @@
       </div>
     </section>
 
+    <section class="progress-strip" id="progressStrip"></section>
+
     <section class="game-shell" id="gameShell">
       <div class="card signal-card">
         <div>
@@ -647,8 +643,9 @@
           <div class="evidence-list" id="evidenceList"></div>
         </div>
         <div class="actions">
-          <button class="secondary" id="skipBtn">Skip Signal</button>
-          <button class="danger" id="endBtn">End Game</button>
+          <button class="secondary" id="backBtn">Back</button>
+          <button class="secondary" id="skipBtn">Skip / Next</button>
+          <button class="danger" id="endBtn">Finish & Show Score</button>
         </div>
       </div>
 
@@ -679,28 +676,12 @@
         </div>
 
         <div class="actions">
-          <button id="submitBtn">Submit Decision</button>
-          <button class="secondary" id="clearBtn">Clear Selection</button>
+          <button id="saveBtn">Save Decision & Next</button>
+          <button class="secondary" id="clearBtn">Clear This Answer</button>
         </div>
 
-        <div class="feedback" id="feedback"></div>
+        <div class="notice" id="notice"></div>
       </div>
-    </section>
-
-    <section class="card leaderboard" id="leaderboardSection">
-      <h2>Leaderboard</h2>
-      <p class="subtitle" style="margin-top: 0;">This leaderboard is saved on this browser only. For classroom use, ask every team to show their final score or let all teams play on one device.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>Score</th>
-            <th>Time Used</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardBody"></tbody>
-      </table>
     </section>
   </main>
 
@@ -708,7 +689,7 @@
     <div class="modal">
       <div class="eyebrow">Challenge Complete</div>
       <h2 id="resultTitle">Great work!</h2>
-      <p id="resultMessage">Your final results are shown below.</p>
+      <p id="resultMessage">Your final results are shown below. Screenshot this screen and send it to the facilitator.</p>
       <div class="result-grid">
         <div class="result-box">
           <small>Final Score</small>
@@ -723,10 +704,9 @@
           <strong id="finalTime">0:00</strong>
         </div>
       </div>
-      <p><strong>Facilitator prompt:</strong> Ask the team to explain one signal they placed correctly and one signal they found difficult. This connects the game back to Technology Intelligence, Scouting, and Technology Management decisions.</p>
+      <p><strong>Facilitator prompt:</strong> Ask the team to explain one decision they were confident about and one signal they skipped or revisited.</p>
       <div class="actions">
         <button id="playAgainBtn">Play Again</button>
-        <button class="secondary" id="modalLeaderboardBtn">View Leaderboard</button>
         <button class="secondary" id="closeModalBtn">Close</button>
       </div>
     </div>
@@ -740,8 +720,7 @@
         text: "A software company is considering an AI coding assistant to speed up development. Developers report faster boilerplate coding, but security and code ownership concerns remain.",
         evidence: ["Early users report productivity improvement for repetitive tasks.", "Requires policy for confidential code, client data, and human review.", "Works best as an assistant, not as a replacement for engineering judgment."],
         answer: "Trial",
-        near: ["Adopt", "Assess"],
-        explanation: "Trial is the best fit. The technology is useful and promising, but should first be piloted with governance, code review, and data protection rules."
+        near: ["Adopt", "Assess"]
       },
       {
         type: "Software / AI",
@@ -749,8 +728,7 @@
         text: "A vendor claims its AI agent can independently gather requirements, code, test, deploy, and maintain enterprise systems with minimal human intervention.",
         evidence: ["The promise is attractive but reliability is still uncertain.", "Accountability and client acceptance are unclear.", "Errors in production systems may create major business risk."],
         answer: "Hold",
-        near: ["Assess"],
-        explanation: "Hold is the best fit. The risk and uncertainty are too high for full adoption. A firm may assess the space, but should not rely on it for critical systems yet."
+        near: ["Assess"]
       },
       {
         type: "Cybersecurity",
@@ -758,8 +736,7 @@
         text: "The engineering team wants to add automated dependency and vulnerability scanning before every production deployment.",
         evidence: ["Integrates into existing DevOps workflow.", "Helps detect security issues earlier.", "Requires tuning to avoid too many false positives."],
         answer: "Adopt",
-        near: ["Trial"],
-        explanation: "Adopt is the best fit if the organization already has CI/CD. It is mature, strategically useful, and supports risk reduction in operations."
+        near: ["Trial"]
       },
       {
         type: "Agriculture / IoT",
@@ -767,8 +744,7 @@
         text: "An agri-tech startup is developing a solar rice dryer. It is considering IoT sensors to monitor grain moisture and improve drying quality.",
         evidence: ["Can improve quality control and reduce spoilage.", "Needs field testing with farmers and local connectivity conditions.", "Cost sensitivity is high for smallholder farmers."],
         answer: "Trial",
-        near: ["Assess"],
-        explanation: "Trial is the best fit. The use case is clear, but it needs pilot testing under real farming conditions, including cost and connectivity constraints."
+        near: ["Assess"]
       },
       {
         type: "Fintech",
@@ -776,8 +752,7 @@
         text: "A fintech firm is studying blockchain identity to speed up KYC and customer onboarding.",
         evidence: ["Potential to reduce onboarding friction.", "Requires regulation, interoperability, and strong data governance.", "Benefits depend on ecosystem adoption."],
         answer: "Assess",
-        near: ["Trial"],
-        explanation: "Assess is the best fit. The idea may be valuable, but it depends on regulation, standards, ecosystem participation, and privacy safeguards."
+        near: ["Trial"]
       },
       {
         type: "Education Technology",
@@ -785,8 +760,7 @@
         text: "A university is considering an AI tutor that gives students immediate feedback on writing drafts and practice quizzes.",
         evidence: ["Can support personalized learning at scale.", "May produce inaccurate or biased feedback.", "Needs teacher oversight and academic integrity guidelines."],
         answer: "Trial",
-        near: ["Assess"],
-        explanation: "Trial is the best fit. The technology can improve learning support, but should be piloted with teacher oversight, clear guidelines, and evaluation."
+        near: ["Assess"]
       },
       {
         type: "Healthcare",
@@ -794,8 +768,7 @@
         text: "A clinic is offered an AI tool that claims to diagnose patient conditions directly and automatically without physician review.",
         evidence: ["Potentially high impact but also high safety risk.", "Medical accountability is critical.", "False results can cause harm."],
         answer: "Hold",
-        near: ["Assess"],
-        explanation: "Hold is the best fit. In healthcare, high-risk AI should not be used without human clinical review, validation, and compliance checks."
+        near: ["Assess"]
       },
       {
         type: "Telecommunications",
@@ -803,8 +776,7 @@
         text: "A telco is exploring 5G network slicing to offer customized network performance for hospitals, factories, and logistics companies.",
         evidence: ["Strong potential for enterprise differentiation.", "Requires infrastructure readiness and enterprise demand validation.", "Use cases may vary by customer segment."],
         answer: "Assess",
-        near: ["Trial"],
-        explanation: "Assess is the best fit unless infrastructure and customer demand are already validated. The company should study use cases, readiness, and market fit."
+        near: ["Trial"]
       },
       {
         type: "Operations / Automation",
@@ -812,8 +784,7 @@
         text: "A company has high-volume repetitive tasks such as report generation, data encoding, and reconciliation. It is considering RPA tools.",
         evidence: ["Mature technology for rule-based repetitive processes.", "Can reduce manual workload.", "Works best when processes are already stable and standardized."],
         answer: "Adopt",
-        near: ["Trial"],
-        explanation: "Adopt is the best fit if the process is stable and repetitive. RPA is already mature for many back-office use cases."
+        near: ["Trial"]
       },
       {
         type: "Green Technology",
@@ -821,8 +792,7 @@
         text: "A cloud team is exploring workload scheduling that runs non-urgent computing tasks when renewable energy availability is higher.",
         evidence: ["Supports sustainability goals.", "May reduce carbon footprint for flexible workloads.", "Needs alignment with performance, cost, and service-level requirements."],
         answer: "Assess",
-        near: ["Trial"],
-        explanation: "Assess is the best fit. It has strategic sustainability value, but the team must evaluate workload flexibility, cost, and service-level impact."
+        near: ["Trial"]
       },
       {
         type: "Customer Experience",
@@ -830,8 +800,7 @@
         text: "A service company wants to deploy an AI chatbot for FAQs, order status, and basic support requests, with escalation to human agents.",
         evidence: ["Can reduce repetitive workload.", "Improves availability for simple requests.", "Needs escalation path and monitoring for incorrect responses."],
         answer: "Trial",
-        near: ["Adopt"],
-        explanation: "Trial is the best fit. The use case is practical, but it should first be piloted, monitored, and connected to human escalation."
+        near: ["Adopt"]
       },
       {
         type: "Research / IP",
@@ -839,37 +808,31 @@
         text: "A startup wants to build a sensor device. Before prototyping, it plans to search patent databases and research papers for similar technologies.",
         evidence: ["Helps avoid duplicating existing work.", "Can reveal possible partners or licensing opportunities.", "Supports freedom-to-operate assessment."],
         answer: "Adopt",
-        near: ["Trial"],
-        explanation: "Adopt is the best fit. Patent and research scouting should be part of responsible technology development before major investment."
+        near: ["Trial"]
       }
     ];
 
     const state = {
       teamName: "",
       signals: [],
+      responses: [],
       currentIndex: 0,
-      score: 0,
-      correct: 0,
-      selectedRing: null,
       totalSeconds: 0,
       secondsLeft: 0,
       timer: null,
-      startedAt: null,
       finished: false
     };
 
     const setupSection = document.getElementById("setupSection");
     const statusBar = document.getElementById("statusBar");
+    const progressStrip = document.getElementById("progressStrip");
     const gameShell = document.getElementById("gameShell");
-    const leaderboardSection = document.getElementById("leaderboardSection");
     const teamNameInput = document.getElementById("teamName");
     const difficultySelect = document.getElementById("difficulty");
     const minutesSelect = document.getElementById("minutes");
     const startBtn = document.getElementById("startBtn");
-    const showLeaderboardBtn = document.getElementById("showLeaderboardBtn");
-    const resetLeaderboardBtn = document.getElementById("resetLeaderboardBtn");
     const teamStat = document.getElementById("teamStat");
-    const scoreStat = document.getElementById("scoreStat");
+    const answeredStat = document.getElementById("answeredStat");
     const roundStat = document.getElementById("roundStat");
     const timerStat = document.getElementById("timerStat");
     const signalType = document.getElementById("signalType");
@@ -878,11 +841,12 @@
     const evidenceList = document.getElementById("evidenceList");
     const zones = document.querySelectorAll(".zone");
     const rationale = document.getElementById("rationale");
-    const submitBtn = document.getElementById("submitBtn");
+    const saveBtn = document.getElementById("saveBtn");
     const clearBtn = document.getElementById("clearBtn");
+    const backBtn = document.getElementById("backBtn");
     const skipBtn = document.getElementById("skipBtn");
     const endBtn = document.getElementById("endBtn");
-    const feedback = document.getElementById("feedback");
+    const notice = document.getElementById("notice");
     const resultModal = document.getElementById("resultModal");
     const resultTitle = document.getElementById("resultTitle");
     const resultMessage = document.getElementById("resultMessage");
@@ -890,9 +854,7 @@
     const finalCorrect = document.getElementById("finalCorrect");
     const finalTime = document.getElementById("finalTime");
     const playAgainBtn = document.getElementById("playAgainBtn");
-    const modalLeaderboardBtn = document.getElementById("modalLeaderboardBtn");
     const closeModalBtn = document.getElementById("closeModalBtn");
-    const leaderboardBody = document.getElementById("leaderboardBody");
 
     function shuffle(array) {
       const arr = [...array];
@@ -909,103 +871,172 @@
       return `${m}:${String(s).padStart(2, "0")}`;
     }
 
+    function answeredCount() {
+      return state.responses.filter(response => response && response.ring).length;
+    }
+
+    function showNotice(message) {
+      notice.innerHTML = message;
+      notice.style.display = "block";
+      setTimeout(() => {
+        notice.style.display = "none";
+      }, 1600);
+    }
+
     function updateStats() {
+      const totalAnswered = answeredCount();
       teamStat.textContent = state.teamName;
-      scoreStat.textContent = state.score;
-      roundStat.textContent = `${Math.min(state.currentIndex + 1, state.signals.length)} / ${state.signals.length}`;
-      timerStat.textContent = formatTime(state.secondsLeft);
+      answeredStat.textContent = `${totalAnswered} / ${state.signals.length}`;
+      roundStat.textContent = `${state.currentIndex + 1} / ${state.signals.length}`;
+      timerStat.textContent = formatTime(Math.max(state.secondsLeft, 0));
+      backBtn.disabled = state.currentIndex === 0;
+      skipBtn.textContent = state.currentIndex === state.signals.length - 1 ? "Skip / Review First" : "Skip / Next";
+      endBtn.disabled = totalAnswered !== state.signals.length;
+      endBtn.title = totalAnswered === state.signals.length ? "Finish and show final score" : "Answer all signals before finishing";
+    }
+
+    function renderProgress() {
+      progressStrip.innerHTML = state.signals.map((_, index) => {
+        const response = state.responses[index];
+        const status = response && response.ring ? "answered" : response && response.skipped ? "skipped" : "";
+        const current = index === state.currentIndex ? "current" : "";
+        return `<button class="dot ${status} ${current}" data-index="${index}" title="Signal ${index + 1}">${index + 1}</button>`;
+      }).join("");
+
+      document.querySelectorAll(".dot").forEach(dot => {
+        dot.addEventListener("click", () => {
+          goToSignal(Number(dot.dataset.index));
+        });
+      });
     }
 
     function renderSignal() {
       const signal = state.signals[state.currentIndex];
-      if (!signal) {
-        endGame();
-        return;
-      }
+      const response = state.responses[state.currentIndex] || { ring: null, rationale: "", skipped: false };
 
       signalType.textContent = signal.type;
       scenarioTitle.textContent = signal.title;
       scenarioText.textContent = signal.text;
       evidenceList.innerHTML = signal.evidence.map(item => `<div class="evidence">${item}</div>`).join("");
-      rationale.value = "";
-      feedback.style.display = "none";
-      feedback.className = "feedback";
-      clearSelection();
+      rationale.value = response.rationale || "";
+      notice.style.display = "none";
+
+      clearSelection(false);
+      if (response.ring) {
+        const selectedZone = document.querySelector(`.zone[data-ring="${response.ring}"]`);
+        if (selectedZone) selectedZone.classList.add("selected");
+      }
+
       updateStats();
+      renderProgress();
     }
 
-    function clearSelection() {
-      state.selectedRing = null;
+    function clearSelection(clearSaved = true) {
       zones.forEach(zone => zone.classList.remove("selected"));
+      if (clearSaved) {
+        state.responses[state.currentIndex] = { ring: null, rationale: "", skipped: true };
+        rationale.value = "";
+        updateStats();
+        renderProgress();
+      }
+    }
+
+    function getSelectedRing() {
+      const selected = document.querySelector(".zone.selected");
+      return selected ? selected.dataset.ring : null;
+    }
+
+    function saveCurrentDecision(showMessage = true) {
+      const selectedRing = getSelectedRing();
+      if (!selectedRing) {
+        if (showMessage) showNotice("Please select a radar ring before saving. You can skip if you want to return later.");
+        return false;
+      }
+
+      state.responses[state.currentIndex] = {
+        ring: selectedRing,
+        rationale: rationale.value.trim(),
+        skipped: false
+      };
+
+      if (showMessage) showNotice("Decision saved. You can still go back and edit while there is time.");
+      updateStats();
+      renderProgress();
+      return true;
+    }
+
+    function nextSignal() {
+      if (state.currentIndex < state.signals.length - 1) {
+        state.currentIndex += 1;
+      } else {
+        const firstUnanswered = state.responses.findIndex(response => !response || !response.ring);
+        state.currentIndex = firstUnanswered >= 0 ? firstUnanswered : 0;
+      }
+      renderSignal();
+    }
+
+    function previousSignal() {
+      if (state.currentIndex > 0) {
+        state.currentIndex -= 1;
+        renderSignal();
+      }
+    }
+
+    function goToSignal(index) {
+      if (index >= 0 && index < state.signals.length && !state.finished) {
+        state.currentIndex = index;
+        renderSignal();
+      }
+    }
+
+    function skipSignal() {
+      const current = state.responses[state.currentIndex];
+      if (!current || !current.ring) {
+        state.responses[state.currentIndex] = {
+          ring: null,
+          rationale: rationale.value.trim(),
+          skipped: true
+        };
+      }
+      nextSignal();
     }
 
     function rationaleBonus(text) {
-      const words = text.toLowerCase();
-      const keywords = ["risk", "impact", "customer", "value", "strategy", "strategic", "maturity", "cost", "privacy", "security", "pilot", "partner", "market", "operations"];
+      const words = (text || "").toLowerCase();
+      const keywords = ["risk", "impact", "customer", "value", "strategy", "strategic", "maturity", "cost", "privacy", "security", "pilot", "partner", "market", "operations", "governance", "adoption"];
       let hits = 0;
       keywords.forEach(keyword => {
         if (words.includes(keyword)) hits += 1;
       });
-      if (text.trim().length < 24) return 0;
+      if ((text || "").trim().length < 24) return 0;
       return Math.min(3, hits);
     }
 
-    function submitDecision() {
-      if (!state.selectedRing) {
-        alert("Please select a radar ring first.");
-        return;
-      }
+    function calculateScore() {
+      let score = 0;
+      let correct = 0;
+      let answered = 0;
 
-      const signal = state.signals[state.currentIndex];
-      let points = 0;
-      let resultClass = "bad";
-      let headline = "Not quite.";
+      state.signals.forEach((signal, index) => {
+        const response = state.responses[index];
+        if (!response || !response.ring) return;
 
-      if (state.selectedRing === signal.answer) {
-        points += 10;
-        state.correct += 1;
-        resultClass = "good";
-        headline = "Correct decision.";
-      } else if (signal.near.includes(state.selectedRing)) {
-        points += 5;
-        resultClass = "partial";
-        headline = "Reasonable, but not the strongest option.";
-      }
-
-      const bonus = rationaleBonus(rationale.value);
-      points += bonus;
-      state.score += points;
-
-      feedback.className = `feedback ${resultClass}`;
-      feedback.innerHTML = `
-        <strong>${headline}</strong><br>
-        Best radar ring: <strong>${signal.answer}</strong><br>
-        ${signal.explanation}<br>
-        <br>
-        Points earned: <strong>${points}</strong> ${bonus > 0 ? `(including +${bonus} rationale bonus)` : ""}
-      `;
-      feedback.style.display = "block";
-      updateStats();
-
-      submitBtn.disabled = true;
-      setTimeout(() => {
-        submitBtn.disabled = false;
-        state.currentIndex += 1;
-        if (state.currentIndex >= state.signals.length) {
-          endGame();
-        } else {
-          renderSignal();
+        answered += 1;
+        if (response.ring === signal.answer) {
+          score += 10;
+          correct += 1;
+        } else if (signal.near.includes(response.ring)) {
+          score += 5;
         }
-      }, 1850);
-    }
+        score += rationaleBonus(response.rationale);
+      });
 
-    function skipSignal() {
-      state.currentIndex += 1;
-      if (state.currentIndex >= state.signals.length) {
-        endGame();
-      } else {
-        renderSignal();
-      }
+      const usedSeconds = state.totalSeconds - Math.max(state.secondsLeft, 0);
+      const speedRatio = Math.max(0, 1 - usedSeconds / state.totalSeconds);
+      const speedBonus = answered === state.signals.length ? Math.round(speedRatio * 10) : 0;
+      score += speedBonus;
+
+      return { score, correct, answered, usedSeconds, speedBonus };
     }
 
     function startTimer() {
@@ -1027,18 +1058,15 @@
 
       state.teamName = team;
       state.signals = shuffle(allSignals).slice(0, count);
+      state.responses = Array.from({ length: count }, () => ({ ring: null, rationale: "", skipped: false }));
       state.currentIndex = 0;
-      state.score = 0;
-      state.correct = 0;
-      state.selectedRing = null;
       state.totalSeconds = minutes * 60;
       state.secondsLeft = minutes * 60;
-      state.startedAt = Date.now();
       state.finished = false;
 
       setupSection.style.display = "none";
-      leaderboardSection.style.display = "none";
       statusBar.style.display = "grid";
+      progressStrip.style.display = "flex";
       gameShell.style.display = "grid";
       resultModal.style.display = "none";
 
@@ -1046,110 +1074,49 @@
       startTimer();
     }
 
-    function speedBonus() {
-      const used = state.totalSeconds - Math.max(state.secondsLeft, 0);
-      const ratio = Math.max(0, 1 - used / state.totalSeconds);
-      return Math.round(ratio * 10);
-    }
-
     function endGame() {
       if (state.finished) return;
       state.finished = true;
       clearInterval(state.timer);
 
-      const bonus = speedBonus();
-      state.score += bonus;
-      updateStats();
-
-      const usedSeconds = state.totalSeconds - Math.max(state.secondsLeft, 0);
-      saveScore({
-        team: state.teamName,
-        score: state.score,
-        correct: state.correct,
-        total: state.signals.length,
-        usedSeconds,
-        date: new Date().toISOString()
-      });
-
-      resultTitle.textContent = `${state.teamName}, your score is ${state.score}`;
-      resultMessage.textContent = `You placed ${state.correct} out of ${state.signals.length} signals in the best radar ring. Speed bonus: +${bonus}.`;
-      finalScore.textContent = state.score;
-      finalCorrect.textContent = `${state.correct}/${state.signals.length}`;
-      finalTime.textContent = formatTime(usedSeconds);
+      const result = calculateScore();
+      resultTitle.textContent = `${state.teamName}, your score is ${result.score}`;
+      resultMessage.textContent = `You answered ${result.answered} out of ${state.signals.length} signals and placed ${result.correct} in the best radar ring. Speed bonus: +${result.speedBonus}. Screenshot this result.`;
+      finalScore.textContent = result.score;
+      finalCorrect.textContent = `${result.correct}/${state.signals.length}`;
+      finalTime.textContent = formatTime(result.usedSeconds);
       resultModal.style.display = "grid";
-      renderLeaderboard();
-    }
-
-    function saveScore(entry) {
-      const scores = JSON.parse(localStorage.getItem("techRadarScores") || "[]");
-      scores.push(entry);
-      scores.sort((a, b) => b.score - a.score || a.usedSeconds - b.usedSeconds);
-      localStorage.setItem("techRadarScores", JSON.stringify(scores.slice(0, 20)));
-    }
-
-    function renderLeaderboard() {
-      const scores = JSON.parse(localStorage.getItem("techRadarScores") || "[]");
-      leaderboardBody.innerHTML = scores.length
-        ? scores.map((entry, index) => `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${entry.team}</td>
-            <td><strong>${entry.score}</strong> (${entry.correct}/${entry.total})</td>
-            <td>${formatTime(entry.usedSeconds)}</td>
-          </tr>
-        `).join("")
-        : `<tr><td colspan="4">No scores yet. Start a challenge first.</td></tr>`;
     }
 
     zones.forEach(zone => {
       zone.addEventListener("click", () => {
-        clearSelection();
+        zones.forEach(item => item.classList.remove("selected"));
         zone.classList.add("selected");
-        state.selectedRing = zone.dataset.ring;
       });
     });
 
     startBtn.addEventListener("click", startGame);
-    submitBtn.addEventListener("click", submitDecision);
-    clearBtn.addEventListener("click", clearSelection);
-    skipBtn.addEventListener("click", skipSignal);
-    endBtn.addEventListener("click", endGame);
-
-    showLeaderboardBtn.addEventListener("click", () => {
-      renderLeaderboard();
-      leaderboardSection.style.display = leaderboardSection.style.display === "block" ? "none" : "block";
-    });
-
-    resetLeaderboardBtn.addEventListener("click", () => {
-      if (confirm("Reset leaderboard on this browser?")) {
-        localStorage.removeItem("techRadarScores");
-        renderLeaderboard();
+    saveBtn.addEventListener("click", () => {
+      if (saveCurrentDecision(true)) {
+        setTimeout(nextSignal, 450);
       }
     });
+    clearBtn.addEventListener("click", () => clearSelection(true));
+    backBtn.addEventListener("click", previousSignal);
+    skipBtn.addEventListener("click", skipSignal);
+    endBtn.addEventListener("click", endGame);
 
     playAgainBtn.addEventListener("click", () => {
       resultModal.style.display = "none";
       setupSection.style.display = "grid";
       statusBar.style.display = "none";
+      progressStrip.style.display = "none";
       gameShell.style.display = "none";
-      leaderboardSection.style.display = "none";
-    });
-
-    modalLeaderboardBtn.addEventListener("click", () => {
-      resultModal.style.display = "none";
-      setupSection.style.display = "grid";
-      statusBar.style.display = "none";
-      gameShell.style.display = "none";
-      renderLeaderboard();
-      leaderboardSection.style.display = "block";
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     });
 
     closeModalBtn.addEventListener("click", () => {
       resultModal.style.display = "none";
     });
-
-    renderLeaderboard();
   </script>
 </body>
 </html>
